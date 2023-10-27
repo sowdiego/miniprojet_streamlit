@@ -7,6 +7,7 @@ import requests
 from bs4 import BeautifulSoup
 
 st.set_page_config(layout="wide")
+sns.set(style="whitegrid")
 
 st.title("Mini Projet Streamlit")
 st.subheader("Bienvenue sur mon tableau de bord de ventes des étudiants!")
@@ -27,28 +28,28 @@ data['State Complet'] = data['State'].map(state_mapping)
 
 #st.write(data)
 
-st.sidebar.header("Please Filter Here:")
+st.sidebar.header("Effectuer des filtre:")
 region_choose = st.sidebar.multiselect(
-    "Pick your Region:",
+    "Selectionner une Région:",
     options=data["Region"].unique(),
     default=data["Region"].unique()[0]
 )
 
 state_choose = st.sidebar.multiselect(
-    "Pick the State:",
+    "electionner un état:",
     options=data[data['Region'].isin(region_choose)]['State Complet'].unique() if region_choose else data["State Complet"].unique(),
     #default=data["State Complet"].unique()[8],
 )
 
 country_choose = st.sidebar.multiselect(
-    "Pick the Country:",
+    "electionner une comté:",
     options = data[data['State Complet'].isin(state_choose)]['County'].unique() if state_choose else data["County"].unique(),
     #options=data["County"].unique(),
     #default=data["County"].unique()[0],
 )
 
 city_choose = st.sidebar.multiselect(
-    "Pick the City:",
+    "electionner une ville:",
     options=data[data['County'].isin(country_choose)]['City'].unique() if country_choose else data["City"].unique(),
     #default=data["City"].unique()[0]
 )
@@ -57,12 +58,11 @@ left_column, right_column = st.columns(2)
 order_date = pd.to_datetime(data['order_date'], format="%Y-%m-%d")
 
 with left_column:
-    st.subheader('Start Date')
-    #start_date = st.date_input('start date', current_date)
+    st.subheader('Début')
     start_date = st.date_input("Date de début", min_value=order_date.min(), max_value=order_date.max(), value=order_date.min())
 
 with right_column:
-    st.subheader('End Date')
+    st.subheader('Fin')
     end_date = st.date_input("Date de fin", min_value=order_date.min(), max_value=order_date.max(), value=order_date.max())
 
 selected_statuses = st.sidebar.multiselect(
@@ -73,7 +73,7 @@ selected_statuses = st.sidebar.multiselect(
 start_date = pd.to_datetime(start_date, format="%Y-%m-%d")
 end_date = pd.to_datetime(end_date, format="%Y-%m-%d")
 
-# Filter DataFrame based on selected date range
+# Filter DataFrame 
 #data = data.head(100)
 filtered_data = data[(order_date >= start_date) & (order_date <= end_date)] 
 filtered_data['total'] = pd.to_numeric(filtered_data['total'], errors='coerce')
@@ -96,7 +96,7 @@ total_commandes = filtered_data['order_id'].nunique()
 
 
 
-# 3 - Affichage des KPI
+# Affichage des KPI
 left_column, middle_column, right_column = st.columns(3)
 with left_column:
     st.subheader(f"Total vente: {total_vente}")
@@ -112,6 +112,10 @@ with left_column:
 
         fig_bar = plt.figure(figsize=(8, 5))
         sns.barplot(x='category', y='total', data=filtered_data, estimator=sum, ci=None)
+
+        # fig = px.bar(filtered_data, x='category', y='total', text='Info', title='Nombre total de vente par catégorie')
+        # fig.show()
+
         plt.title('Nombre total de vente par catégorie')
         plt.xticks(rotation=60, ha='center')
         st.pyplot(fig_bar)
@@ -175,8 +179,8 @@ with left_column:
     fig, ax = plt.subplots()
     monthly_sales.plot(kind='line', marker='o', ax=ax)
 
-    ax.set_ylabel('Total Sales')
-    ax.set_title('Monthly Total Sales')
+    ax.set_ylabel('Ventes totales')
+    ax.set_title('Ventes totales mensuelles')
 
     # Display the line plot in Streamlit
     plt.xticks(rotation=45, ha='center')
@@ -209,10 +213,10 @@ with right_column:
     # Create a new column for latitude and longitude
     filtered_data['Latitude'] = us_latitude
     filtered_data['Longitude'] = us_longitude
-    st.write(filtered_data.head())
+    #st.write(filtered_data.head())
 
     # Streamlit
-    st.title("Total Sales by State with Map")
+    #st.title("Ventes totales par État avec carte")
 
     # Plot the map using plotly
     fig = px.scatter_geo(
@@ -227,7 +231,7 @@ with right_column:
     fig.update_geos(showcoastlines=True, coastlinecolor="Black", showland=True, landcolor="white")
 
     # Show the map
-    st.plotly_chart(fig)
+    #st.plotly_chart(fig)
 
 
 
