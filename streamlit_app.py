@@ -1,13 +1,8 @@
 import streamlit as st
 import pandas as pd
-from sklearn.linear_model import LinearRegression
 import matplotlib.pyplot as plt
 import seaborn as sns
 import plotly.express as px
-from datetime import  datetime , timedelta
-from datetime import time 
-import numpy as np
-import mplcursors 
 import requests
 from bs4 import BeautifulSoup
 
