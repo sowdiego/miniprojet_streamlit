@@ -28,28 +28,28 @@ data['State Complet'] = data['State'].map(state_mapping)
 
 #st.write(data)
 
-st.sidebar.header("Effectuer des filtre:")
+st.sidebar.header("Effectuer des filtres:")
 region_choose = st.sidebar.multiselect(
-    "Selectionner une Région:",
+    "Sélectionner une Région:",
     options=data["Region"].unique(),
     default=data["Region"].unique()[0]
 )
 
 state_choose = st.sidebar.multiselect(
-    "electionner un état:",
+    "Sélectionner un état:",
     options=data[data['Region'].isin(region_choose)]['State Complet'].unique() if region_choose else data["State Complet"].unique(),
     #default=data["State Complet"].unique()[8],
 )
 
 country_choose = st.sidebar.multiselect(
-    "electionner une comté:",
+    "Sélectionner une comté:",
     options = data[data['State Complet'].isin(state_choose)]['County'].unique() if state_choose else data["County"].unique(),
     #options=data["County"].unique(),
     #default=data["County"].unique()[0],
 )
 
 city_choose = st.sidebar.multiselect(
-    "electionner une ville:",
+    "Sélectionner une ville:",
     options=data[data['County'].isin(country_choose)]['City'].unique() if country_choose else data["City"].unique(),
     #default=data["City"].unique()[0]
 )
