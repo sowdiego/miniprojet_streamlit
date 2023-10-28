@@ -113,8 +113,6 @@ with left_column:
         fig_bar = plt.figure(figsize=(8, 5))
         sns.barplot(x='category', y='total', data=filtered_data, estimator=sum, ci=None)
 
-        # fig = px.bar(filtered_data, x='category', y='total', text='Info', title='Nombre total de vente par catégorie')
-        # fig.show()
 
         plt.title('Nombre total de vente par catégorie')
         plt.xticks(rotation=60, ha='center')
@@ -172,17 +170,16 @@ with left_column:
     # Convert 'Date' column to datetime
     filtered_data['order_date'] = pd.to_datetime(filtered_data['order_date'])
 
-# Extract month-year from the 'Date' column
+
     filtered_data['Month_Year'] = filtered_data['order_date'].dt.to_period('M')
     monthly_sales = filtered_data.groupby('Month_Year')['total'].sum()
-    # Create a line plot for monthly sales
+  
     fig, ax = plt.subplots()
     monthly_sales.plot(kind='line', marker='o', ax=ax)
 
     ax.set_ylabel('Ventes totales')
     ax.set_title('Ventes totales mensuelles')
 
-    # Display the line plot in Streamlit
     plt.xticks(rotation=45, ha='center')
     st.pyplot(fig)
 
@@ -207,10 +204,9 @@ with right_column:
             return None, None
 
 
-    # Get coordinates for the United States
     us_latitude, us_longitude = get_coordinates('US')
 
-    # Create a new column for latitude and longitude
+   
     filtered_data['Latitude'] = us_latitude
     filtered_data['Longitude'] = us_longitude
     #st.write(filtered_data.head())
@@ -230,7 +226,6 @@ with right_column:
     )
     fig.update_geos(showcoastlines=True, coastlinecolor="Black", showland=True, landcolor="white")
 
-    # Show the map
     #st.plotly_chart(fig)
 
 
